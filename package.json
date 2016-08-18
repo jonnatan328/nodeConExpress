@@ -1,0 +1,21 @@
+{
+  "name": "WS",
+  "version": "0.0.0",
+  "description": "",
+  "main": "socketIoClient.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jonnatan328/nodeConExpress.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonnatan328/nodeConExpress/issues"
+  },
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
