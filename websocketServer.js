@@ -3,7 +3,7 @@ var app = require('express')();
 var ws = require('express-ws')(app);
 app.get('/', (req, res) => {
   console.error('express connection');
-  res.sendFile(path.join(__dirname, 'ws.html'));
+  res.sendFile(path.join(__dirname, 'websocketClient.html'));
 });
 app.ws('/', (s, req) => {
   console.error('websocket connection');

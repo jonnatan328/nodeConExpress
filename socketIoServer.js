@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 app.get('/', (req, res) => {
   console.error('express connection');
-  res.sendFile(path.join(__dirname, 'si.html'));
+  res.sendFile(path.join(__dirname, 'socketIoClient.html'));
 });
 io.on('connection', s => {
   console.error('socket.io connection');
