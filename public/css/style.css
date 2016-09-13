@@ -1,0 +1,80 @@
+@import url('//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
+.nameGame {
+	text-align: center;
+	border: 3px solid black;
+	font-family: Arial black; 
+	padding: 10px;
+}
+
+body {
+	background-image: url("/img/Batalla-naval.jpg");
+	background-repeat: no-repeat;
+	background-size: 100% ;
+}
+
+canvas {
+	border:1px solid #000000;
+	background-image: url("/img/fondoAgua.jpg");
+}
+
+.subTexts {
+	color: white;
+}
+
+.rivals {
+	text-align: center;
+}
+
+#beginGame, #disconnect {
+	background-color: #008CBA;
+}
+
+.notify-info, .notify-success, .notify-warning, .notify-error {
+    padding:10px;
+    margin:10px 0;
+}
+.notify-info:before, .notify-success:before, .notify-warning:before, .notify-error:before {
+    font-family:FontAwesome;
+    font-style:normal;
+    font-weight:400;
+    speak:none;
+    display:inline-block;
+    text-decoration:inherit;
+    width:1em;
+    margin-right:.2em;
+    text-align:center;
+    font-variant:normal;
+    text-transform:none;
+    line-height:1em;
+    margin-left:.2em;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale
+}
+.notify-info:before {
+    content:"\f05a";
+}
+.notify-success:before {
+    content:'\f00c';
+}
+.notify-warning:before {
+    content:'\f071';
+}
+.notify-error:before {
+    content:'\f057';
+}
+.notify-info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+.notify-success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.notify-warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.notify-error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}

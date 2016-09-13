@@ -23,14 +23,15 @@ io.on('connection', socket => {
 		// when the client emits 'adduser', this listens and executes
 		socket.on('addPlayer', function(username){
 			//if(numPlayers < 2){
-				players[username] = username;
+				console.log(socket.id);
+				players[username] = socket.id;
 				console.log(players[username]);
 				numPlayers ++;
 				console.log(numPlayers);
 				// echo to client they've connected
-				socket.emit('updatField', 'SERVER', username + ' te has conectado al campo de batalla');
+				socket.emit('updatField', 'SERVER: ', username + ' te has conectado al campo de batalla');
 				// echo that a person has connected 
-				socket.broadcast.emit('updatField', 'SERVER', username + ' Se ha unido a la batalla');
+				socket.broadcast.emit('updatField', 'SERVER: ', username + ' Se ha unido a la batalla');
 			/*}
 			else{
 				socket.emit('forceDisconnection');
@@ -46,7 +47,7 @@ io.on('connection', socket => {
 		socket.on('ready',function(user){
 			ready ++;
 			if(ready!=2){
-				socket.emit('wait',{msg: 'Espera a que este listo tu enemigo'});
+				socket.emit('wait',{msg: 'Espera a que este listo tu enemigo...'});
 			}
 			else{
 				io.emit('start',{msg: 'Que empiece la batalla'});
@@ -63,6 +64,7 @@ io.on('connection', socket => {
 		socket.on('win', function(data){
 			socket.broadcast.emit('winner',{msg: '¡Fabuloso, has ganado la batalla!'});
 			socket.emit('loser',{msg: 'Perdiste amigo, ¡Te han dado en la madre!'});
+			
 		});
 });
 

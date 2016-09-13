@@ -4,7 +4,8 @@
 		<meta charset=utf-8>
 		<meta name=viewport content="width=device-width, initial-scale=1">
 		<title>Batalla naval</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" type="text/css" href="/css/style.css">
+		<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 		<script src="/js/jquery-2.0.2.min.js"></script>
 		<script src="/js/bootstrap.js"></script>
 		<script src="/js/bootstrap.min.js"></script>
@@ -12,28 +13,59 @@
 	</head>
 	<body>
 		<div class="container">
-			<div id='conversation'></div>
-			<h1>Campo de batalla</h1>
-			<div class="row">
-				<div class="col-md-5">
-					<h2>Enemigo</h2>
-					<canvas width="400" height="400" id="myEnemy"></canvas>
+			<div class="nameGame">
+				<h1>Batalla naval</h1>
+			</div>
+			<div class="subTexts">
+				<div class="" id="messages">
+				
 				</div>
-				<div class="col-md-4 droptarget" id="droptarget">
-					<div id='me'></div>
-					<canvas width="400" height="400" id="myField"></canvas>
-					<h3></h3>
+				<div class="row rivals">
+					<div class="col-md-5">
+						<h2>Enemigo</h2>
+					</div>				
+					<div id='me' class="col-md-5">
+						
+					</div>
 				</div>
 			</div>
+			
 			<div class="row">
-				<div class="col-md-4 offset-md-5">
-					<img src="/img/barcoGrande.jpg" alt="E.E.U.U" id="barcoGrande" height="160" width="40" draggable="true">
-					<img src="/img/barcoGrande2.jpg" alt="Francia" id="barcoGrande2" height="160" width="40" draggable="true">
-					<img src="/img/barcoMediano.jpg" alt="Rusia" id="barcoMediano" height="120" width="40" draggable="true">
-					<img src="/img/barcoMediano2.jpg" alt="China" id="barcoMediano2" height="120" width="40" draggable="true">
-					<img src="/img/barcoPequeño.jpg" alt="Alemania" id="barcoPequeño" height="80" width="40" draggable="true">
+				<div class="col-md-5">
+					<canvas width="400" height="400" id="myEnemy"></canvas>
 				</div>
-				<input type="submit" id='beginGame' name="beginGame" value="Empezar batalla" >
+				<div class="col-md-5" id="droptarget">
+					<div class="row">
+						<canvas width="400" height="400" id="myField"></canvas>
+					</div>
+					<div class="row">
+						<input type="submit" id='beginGame' name="beginGame" value="Listo para la batalla" >
+						<input type="submit" id='disconnect' name="disconnect" value="Desconectarme" >
+					</div>
+					
+				</div>
+
+				<div class="col-md-1 ">
+					<div class="row">
+						<img src="/img/barcoGrande.png" alt="E.E.U.U" id="barcoGrande" height="160" width="40" draggable="true">
+					</div>
+					<div class="row">
+						<img src="/img/barcoGrande2.png" alt="Francia" id="barcoGrande2" height="160" width="40" draggable="true">
+					</div>		
+					
+				</div>
+				<div class="col-md-1 ">
+					<div class="row">
+						<img src="/img/barcoMediano.png" alt="Rusia" id="barcoMediano" height="120" width="40" draggable="true">
+					</div>
+					<div class="row">
+						<img src="/img/barcoMediano2.png" alt="China" id="barcoMediano2" height="120" width="40" draggable="true">
+					</div>
+					<div class="row">
+						<img src="/img/barcoPequeño.png" alt="Alemania" id="barcoPequeño" height="80" width="40" draggable="true">
+					</div>
+				</div>
+				
 			</div>
 					
 		</div>

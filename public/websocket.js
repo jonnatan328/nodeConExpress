@@ -4,10 +4,10 @@ var enemy = document.getElementById('myEnemy');
 var contextField = field.getContext('2d');
 var contextEnemy = enemy.getContext('2d');
 var ships = document.getElementsByTagName('img');
-var droptarget = document.getElementById('droptarget');
 var buttonStart = document.getElementById('beginGame');
+var msgs = document.getElementById('messages');
 var x = document.createElement("img");
-x.src = "/img/x.jpg";
+x.src = "/img/explosion.png";
 
 var widthCanvas = field.width;
 var heightCanvas = field.height;
@@ -18,7 +18,7 @@ var hit = 0;
 var coordinates = [];
 var numShips = 0;
 var flag = false;
-
+var horizontal = false;
 
 
 var log = function (m) {
@@ -35,6 +35,15 @@ addShips();
 field.addEventListener('drop',drop);
 field.addEventListener('dragover',allowDrop);
 buttonStart.addEventListener('click',beginBatle);
+enemy.addEventListener('mouseover',function(e){
+	//log(e.target);
+	//log(flag);
+	if (flag) {
+		e.target.style.cursor = "crosshair";
+	}else{
+		e.target.style.cursor = 'not-allowed';
+	}
+});
  
 function drawFields(){
 	var x = width;
@@ -59,14 +68,20 @@ function addShips(){
 	var length = ships.length;
 	for (var i = 0; i < length ; i++) {
 		ships[i].addEventListener("dragstart", moveShip, false);
-		ships[i].addEventListener("dragend", function(e){
+		//ships[i].addEventListener("click", rotateShip, false);
+		/*ships[i].addEventListener("dragend", function(e){
 			e.target.style.visibility = 'hidden';
-		});
+		});*/
 	}	
 }
 
 function moveShip(e){
-	var data = {imgId: e.target.id,coordX: e.offsetX,coordY: e.offsetY, width: e.target.width, height: e.target.height};
+	var data = {imgId: e.target.id, coordX: e.offsetX, coordY: e.offsetY, 
+				width: e.target.width, height: e.target.height};
+	log("width" + data.width);
+	log("height" + data.height);
+	log("corrx"+data.coordX);
+	log("corry"+data.coordY);
 	e.dataTransfer.setData("data", JSON.stringify(data));
 }
 
@@ -77,44 +92,82 @@ function drop(e){
     img = document.getElementById(data.imgId);
     var x = e.layerX - data.coordX;
     var y = e.layerY - data.coordY;
-    var coordImage = getCoordforDraw(x,y);
+    var coordImage = getCoordforDraw(x,y,data.width,data.height);
     var lastCoordy = coordImage.y + data.height;
     for (var i = coordImage.y; i < lastCoordy; i+=height) {
     	coordinates.push({x: coordImage.x, y:i});
     }
     numShips ++;
+    img.style.visibility = 'hidden';
+    log(numShips);
     contextField.drawImage(img, coordImage.x , coordImage.y, data.width, data.height);;
 }
 
-function getCoordforDraw(x,y){	
-    var difx = x % width;
-    var dify = y % width;
-    if(difx <= width / 2){
-    	x -= difx;
-    }
-    else{
-    	x += (width - difx);
-    }
-    if(dify <= width / 2){
-    	y -= dify;
-    }
-    else{
-    	y += (width - dify);
-    }
-    var coordDraw = {x:x,y:y};
-    return coordDraw;
+function allowDrop(e){
+	e.preventDefault();
+}
+
+function rotateShip(e){
+	log(horizontal);
+	var angle;
+	if(!horizontal){
+		angle = 270;
+		horizontal = true;
+	}else{
+		angle = 0;
+		horizontal = false;
+	}
+	
+	var img = e.target;
+	log(img);
+	var width = img.width;
+	var height = img.height;
+	log(width);
+	log(height);
+	var jimg = $(img);
+	//log(imgModify);
+	jimg.css({ 
+        '-webkit-transform': 'rotate(' + angle + 'deg)',
+        '-moz-transform': 'rotate(' + angle + 'deg)',
+        'transform': 'rotate(' + angle + 'deg)' 
+    });
+    jimg.width = height;
+    jimg.height = width;
 }
 
 
-function allowDrop(e){
-	e.preventDefault();
+function getCoordforDraw(x,y,width,height){	
+    var difx = x % width;
+    var dify = y % width;
+
+    if(difx <= width / 2){
+    	x -= difx;
+    }else{
+    	x += (width - difx);
+    }
+
+    if(dify <= height / 2){
+    	y -= dify;
+    }else{
+    	y += (height - dify);
+    }
+    //log(y);
+    if((x + width) > widthCanvas){
+    	x = widthCanvas - width; 
+    }
+    if((y + height) > heightCanvas){
+    	y = heightCanvas - height; 
+    }
+
+    var coordDraw = {x:x,y:y};
+    return coordDraw;
 }
 
 
 log('Empieza a crear socket');
 
 socket.on('connect', function (m) { 
-	// call the server-side function 'adduser' and send one parameter (value of prompt)
+	// llama la funciòn del lado del servidor 'addPlayer' y envia un parametro que es el valor del prompt
 	socket.emit('addPlayer', user);
 
 });
@@ -124,35 +177,35 @@ socket.on('forceDisconnection',function(){
 	alert('me han desconectado')
 });
 
-socket.on('wait',function(msg){
-	alert(msg.msg);
+socket.on('wait',function(data){
+	renderMessage("notify-info", data.msg);
 });
-
 
 function beginBatle(){
 	if(numShips==5){
 		socket.emit('ready',user);
-		buttonStart.disable = "true";
+		buttonStart.disabled = "true";
 	}
 	else{
-		alert('Añade todos tus barcos al campo de batalla')
+		renderMessage("notify-warning", "Añade todos los barcos a tu campo de batalla");
 	}
 	
 }
 
 socket.on('flag',function(data){
+	renderMessage("notify-info", data.msg);
 	flag = data.flag;
-	alert(data.msg);
 });
 
-socket.on('start',function(msg){
-	alert(msg.msg);
+socket.on('start',function(data){
+	renderMessage("notify-info", data.msg);
 	enemy.addEventListener('click',shoot);
 });
 
 socket.on('updatField', function (username, data) {
-	var welcome = document.getElementById('conversation');
-	welcome.innerHTML += '<b>' + username + ':</b> ' + data + '<br>';
+	//msgs.innerHTML += '<b>' + username + ':</b> ' + data + '<br>';
+	var msg = username + data;
+	renderMessage("notify-info", msg);
 });
 
 function shoot(e){
@@ -169,24 +222,27 @@ function shoot(e){
 		flag = false;
 	}
 	else{
-		alert('Espera tu turno');
+		renderMessage("notify-warning", "Espera tu turno");
 	}
 	
 }
 
 socket.on('receiveShoot',function(coord){
 	var isHit = isShootCorrect(coord);
-	log(isHit);
+	//log(isHit);
 	//log(user);
 	socket.emit('success',{success: isHit, user: user, coord: coord});
 	if(isHit){
+		renderMessage("notify-info","Viejo, te han dado");
 		contextField.drawImage(x,coord.coorX,coord.coorY,width,height);
 		hit += 1;
-		if(hit == coordinates.length){
+		log(hit);
+		if(hit == 16){
 			socket.emit('win',{user:user});
 		}
 	}
 	else{
+		renderMessage("notify-info","Te salvaste esta vez");
 		contextField.fillStyle="#BCB5B5";
 		contextField.fillRect(coord.coorX,coord.coorY,width,height);
 	}
@@ -197,7 +253,8 @@ socket.on('receiveShoot',function(coord){
 socket.on('goodShot', function(data){
 	contextEnemy.fillStyle="#0E2BCB";
 	contextEnemy.fillRect(data.coord.coorX, data.coord.coorY , width, height);
-	alert(data.msg + " a " + data.user);
+	var msg = data.msg + " a " + data.user;
+	renderMessage("notify-info",msg);
 });
 
 function isShootCorrect(coord){
@@ -210,13 +267,19 @@ function isShootCorrect(coord){
 	return bool;
 }
 
+function renderMessage(type, msg){
+	msgs.className = type;
+	msgs.innerHTML = msg;
+}
+
 socket.on('winner',function(data){
-	alert(data.msg)
+	renderMessage("notify-success",data.msg);
 });
 
 socket.on('loser',function(data){
-	alert(data.msg)
+	renderMessage("notify-info", data.msg);
 });
+
 
 socket.on('connect_error', function (m) { 
 	log("error"); 
